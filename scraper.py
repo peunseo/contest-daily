@@ -2,25 +2,19 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-url = "https://www.wevity.com/?c=find&s=1&gub=1"
-
+url = "https://www.linkareer.com/contest"  # 예시 URL
 res = requests.get(url)
 soup = BeautifulSoup(res.text, "html.parser")
 
 contests = []
 
-for item in soup.select("li.list"):
-    title_tag = item.select_one(".tit")
-    link_tag = item.select_one("a")
+for item in soup.select(".contest-item"):  # 실제 클래스명은 확인 필요
+    title = item.select_one(".contest-title").text.strip()
+    link = item.select_one("a")["href"]
+    contests.append({
+        "title": title,
+        "link": link
+    })
 
-    if title_tag and link_tag:
-        title = title_tag.text.strip()
-        link = "https://www.wevity.com" + link_tag["href"]
-
-        contests.append({
-            "title": title,
-            "link": link
-        })
-
-with open("contests.json","w",encoding="utf-8") as f:
-    json.dump(contests,f,ensure_ascii=False,indent=2)
+with open("contests.json", "w", encoding="utf-8") as f:
+    json.dump(contests, f, ensure_ascii=False, indent=2)
