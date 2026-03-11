@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Daily Contest</title>
+</head>
+
+<body>
+
+<h1>Daily Contest List</h1>
+
+<ul id="contest-list"></ul>
+
+<script>
+
+fetch("contests.json")
+.then(res => res.json())
+.then(data => {
+
+ let html = ""
+
+ data.forEach(c => {
+   html += `<li><a href="${c.link}" target="_blank">${c.title}</a></li>`
+ })
+
+ document.getElementById("contest-list").innerHTML = html
+
+})
+
+</script>
+
+</body>
+</html>
