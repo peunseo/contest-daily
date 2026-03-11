@@ -1,0 +1,36 @@
+name: Contest Scraper
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install libraries
+        run: |
+          pip install requests
+          pip install beautifulsoup4
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit update
+        run: |
+          git config --global user.name "bot"
+          git config --global user.email "bot@github.com"
+          git add contests.json
+          git commit -m "update contests"
+          git push
